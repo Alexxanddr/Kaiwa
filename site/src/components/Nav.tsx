@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 
+const FACEBOOK = "https://www.facebook.com/profile.php?id=61591565498265";
+
 const LINKS = [
   { href: "#features", label: "Features" },
   { href: "#devices", label: "Everywhere" },
@@ -53,6 +55,14 @@ export default function Nav() {
               {l.label}
             </a>
           ))}
+          <a
+            href={FACEBOOK}
+            target="_blank"
+            rel="noopener"
+            className="hidden rounded-full px-3.5 py-2 text-[0.9rem] font-medium text-ink-soft transition-colors hover:bg-white/50 hover:text-deeprose md:inline-block"
+          >
+            Contact
+          </a>
           <a
             href="#download"
             className="ml-1 inline-flex items-center gap-2 rounded-full bg-sumi px-5 py-2.5 text-sm font-medium text-white transition-transform duration-300 hover:-translate-y-0.5"

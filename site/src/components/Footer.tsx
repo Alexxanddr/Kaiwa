@@ -3,6 +3,7 @@ const LINKS = [
   { href: "#ai", label: "Your AI" },
   { href: "#download", label: "Download" },
   { href: "https://github.com/yeshsanchez/Kaiwa", label: "GitHub" },
+  { href: "https://www.facebook.com/profile.php?id=61591565498265", label: "Contact" },
 ];
 
 export default function Footer() {
@@ -16,11 +17,19 @@ export default function Footer() {
           </span>
         </a>
         <div className="flex gap-6">
-          {LINKS.map((l) => (
-            <a key={l.label} href={l.href} className="transition-colors hover:text-white">
-              {l.label}
-            </a>
-          ))}
+          {LINKS.map((l) => {
+            const external = l.href.startsWith("http");
+            return (
+              <a
+                key={l.label}
+                href={l.href}
+                {...(external ? { target: "_blank", rel: "noopener" } : {})}
+                className="transition-colors hover:text-white"
+              >
+                {l.label}
+              </a>
+            );
+          })}
         </div>
       </div>
     </footer>

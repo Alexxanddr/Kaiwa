@@ -1,5 +1,7 @@
+import { useState } from "react";
 import { Download, Github } from "lucide-react";
 import { useReveal } from "@/hooks/useReveal";
+import DonateModal from "@/components/DonateModal";
 
 // /releases/latest/download/<asset> always resolves to the newest release's
 // asset, so these buttons never need updating when a new version ships.
@@ -9,6 +11,9 @@ const REPO = "https://github.com/yeshsanchez/Kaiwa";
 
 export default function Finale() {
   const scope = useReveal<HTMLElement>();
+  // The support modal gates the actual download; it stores which OS build the
+  // user asked for so "Continue to download" can proceed to the right asset.
+  const [pendingDownload, setPendingDownload] = useState<string | null>(null);
 
   return (
     <section
@@ -52,6 +57,10 @@ export default function Finale() {
         <div className="mt-10 flex flex-wrap justify-center gap-4">
           <a
             href={DMG}
+            onClick={(e) => {
+              e.preventDefault();
+              setPendingDownload(DMG);
+            }}
             className="inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[1.02rem] font-medium text-deeprose shadow-[0_14px_30px_-12px_rgba(120,20,50,0.45)] transition-colors hover:bg-[#fff5f7]"
           >
             <Download className="h-5 w-5" strokeWidth={2.2} />
@@ -59,6 +68,10 @@ export default function Finale() {
           </a>
           <a
             href={EXE}
+            onClick={(e) => {
+              e.preventDefault();
+              setPendingDownload(EXE);
+            }}
             className="inline-flex items-center gap-2.5 rounded-full bg-white px-8 py-4 text-[1.02rem] font-medium text-deeprose shadow-[0_14px_30px_-12px_rgba(120,20,50,0.45)] transition-colors hover:bg-[#fff5f7]"
           >
             <Download className="h-5 w-5" strokeWidth={2.2} />
@@ -77,6 +90,11 @@ export default function Finale() {
           Free &amp; open source · AGPL-3.0
         </p>
       </div>
+
+      <DonateModal
+        downloadUrl={pendingDownload}
+        onClose={() => setPendingDownload(null)}
+      />
     </section>
   );
 }
