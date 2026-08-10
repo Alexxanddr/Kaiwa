@@ -6,7 +6,7 @@
 
 [![Release](https://img.shields.io/github/v/release/yeshsanchez/Kaiwa)](https://github.com/yeshsanchez/Kaiwa/releases/latest)
 [![License: AGPL-3.0](https://img.shields.io/badge/license-AGPL--3.0-blue)](LICENSE)
-![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Windows%20(beta)-lightgrey)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Windows-lightgrey)
 ![Local first](https://img.shields.io/badge/AI-100%25%20local%20by%20default-success)
 
 </div>
@@ -23,7 +23,7 @@ Download the installer for your OS from the **[latest release](https://github.co
 - **macOS** — open **`Kaiwa-macos.dmg`** and drag Kaiwa into Applications.
   (Intel build; runs on Apple Silicon via Rosetta.) First launch needs one
   extra click — see [Opening it the first time on macOS](#opening-it-the-first-time-on-macos).
-- **Windows (beta)** — run **`Kaiwa-Setup.exe`** and follow the prompts.
+- **Windows** — run **`Kaiwa-Setup.exe`** and follow the prompts.
 
 Offline speech-to-text (whisper.cpp), VOICEVOX voices, and the JMdict
 dictionary are **bundled** — nothing else to download. The only external piece
@@ -49,8 +49,8 @@ with any one of these (you only do it once):
 
 ### From source (developers)
 
-`git clone` this repo instead — `main` is the stable release, `dev` is where
-work happens — then:
+`git clone` this repo instead (`main` is the stable release; work happens on
+short-lived feature branches off it) — then:
 
 **macOS**
 ```bash
@@ -167,7 +167,7 @@ LLM: Ollama or Gemini/OpenAI/Anthropic over plain HTTP.
 
 ## Contributing
 
-Issues and PRs welcome — branch off `dev`. If Kaiwa helps your Japanese, a ⭐
+Issues and PRs welcome — branch off `main`. If Kaiwa helps your Japanese, a ⭐
 helps other learners find it.
 
 ## Credits & data licenses

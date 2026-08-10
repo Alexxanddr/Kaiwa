@@ -4,8 +4,9 @@ A standalone single-page marketing site for Kaiwa. **Completely separate from th
 app** (`../server/` + `../web/`) — it is not served by or wired into it. Build it
 to static files and host anywhere (GitHub Pages, Netlify, Vercel, an S3 bucket…).
 
-This replaces the older hand-written `../landing/index.html`. That file is left in
-place for reference; delete it once you're happy with this one.
+This is Kaiwa's live marketing site: `npm run build` outputs static files to
+`dist/`, which are published to `../docs/` and served by GitHub Pages from `main`.
+(It replaced an older hand-written `landing/index.html`, since removed.)
 
 ## Stack
 
