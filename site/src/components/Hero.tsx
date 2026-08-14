@@ -32,7 +32,7 @@ function Chip({
       className={`animate-float pointer-events-none absolute ${className ?? ""}`}
       style={{ animationDelay: `${floatDelay}s`, rotate: `${rotate}deg` }}
     >
-      <div className="hero-chip flex items-center gap-3 rounded-2xl border border-white/70 bg-white/85 px-4 py-3 shadow-[0_20px_44px_-24px_rgba(190,55,90,0.5)] backdrop-blur-md">
+      <div className="hero-chip flex items-center gap-3 rounded-2xl border border-white/70 bg-white/90 px-4 py-3 shadow-[0_20px_44px_-24px_rgba(190,55,90,0.5)]">
         {children}
       </div>
     </div>

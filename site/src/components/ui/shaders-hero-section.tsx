@@ -49,16 +49,6 @@ export function ShaderBackground({ children, className = "" }: ShaderBackgroundP
 
   return (
     <div ref={ref} className={`relative w-full overflow-hidden ${className}`}>
-      {/* SVG filter used to give the frosted bento chips a subtle glassy edge */}
-      <svg className="absolute h-0 w-0" aria-hidden="true">
-        <defs>
-          <filter id="kaiwa-glass" x="-50%" y="-50%" width="200%" height="200%">
-            <feTurbulence baseFrequency="0.008" numOctaves="1" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.2" />
-          </filter>
-        </defs>
-      </svg>
-
       {/* base pink mesh — the single animated layer */}
       <MeshGradient
         className="absolute inset-0 h-full w-full"
