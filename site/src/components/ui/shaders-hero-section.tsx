@@ -16,9 +16,16 @@ interface ShaderBackgroundProps {
  * rose — so the deep-plum headline text stays legible on top (the same
  * light-hero approach as the health-coach reference, just pink instead of sky).
  *
- * Motion is switched off (speed 0 stops the shader's rAF loop) when the user
- * prefers reduced motion or when the hero has scrolled out of view; the library
- * additionally pauses whenever the tab is hidden.
+ * Perf notes (a soft gradient has no fine detail, so we render it cheap):
+ *   - ONE animated WebGL layer, not two. The old second "painterly depth" mesh
+ *     ran a whole extra shader + a full-screen soft-light composite every frame;
+ *     it's now a *static* CSS soft-light wash below (zero animation cost).
+ *   - maxPixelCount caps the canvas at ~720p (vs the library's ~8.3M-px retina
+ *     default) and minPixelRatio=1 stops it forcing 2x on hi-dpi screens — the
+ *     GPU draws ~6x fewer pixels/frame; the grain + vignette hide the downscale.
+ *   - Motion is switched off (speed 0 stops the shader's rAF loop) when the user
+ *     prefers reduced motion or when the hero has scrolled out of view; the
+ *     library additionally pauses whenever the tab is hidden.
  */
 export function ShaderBackground({ children, className = "" }: ShaderBackgroundProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -52,7 +59,7 @@ export function ShaderBackground({ children, className = "" }: ShaderBackgroundP
         </defs>
       </svg>
 
-      {/* base pink mesh */}
+      {/* base pink mesh — the single animated layer */}
       <MeshGradient
         className="absolute inset-0 h-full w-full"
         colors={["#fff8f9", "#fde4ec", "#ffc9d8", "#f4a5bb", "#e85d75"]}
@@ -61,15 +68,21 @@ export function ShaderBackground({ children, className = "" }: ShaderBackgroundP
         swirl={0.1}
         grainOverlay={0.04}
         scale={1.2}
+        minPixelRatio={1}
+        maxPixelCount={1280 * 720}
       />
-      {/* second, slower layer of deeper rose adds painterly depth */}
-      <MeshGradient
-        className="absolute inset-0 h-full w-full opacity-45 mix-blend-soft-light"
-        colors={["#ffffff", "#ee6c85", "#ffd9e2", "#d94b63"]}
-        speed={paused ? 0 : 0.18}
-        distortion={0.6}
-        swirl={0.25}
-        scale={1.35}
+      {/* painterly depth — a STATIC soft-light rose wash that stands in for the
+          old second animated shader layer (deeper rose #ee6c85/#d94b63), giving
+          the same warmth in the corners at zero per-frame GPU cost */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 opacity-45 mix-blend-soft-light"
+        style={{
+          background:
+            "radial-gradient(90% 80% at 28% 22%, #ffd9e2 0%, transparent 55%)," +
+            "radial-gradient(85% 90% at 78% 72%, #d94b63 0%, transparent 60%)," +
+            "radial-gradient(120% 120% at 50% 50%, #ee6c85 0%, transparent 72%)",
+        }}
       />
 
       {/* legibility + vignette: bright centre keeps the headline crisp; a soft
