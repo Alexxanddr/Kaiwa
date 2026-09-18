@@ -65,6 +65,45 @@ Voice input additionally needs whisper.cpp: `brew install whisper-cpp`
 .\run.ps1     # → http://localhost:8130
 ```
 
+### Linux / Docker
+
+The server can run on Linux without the desktop launcher. Build and start it
+with Docker (the example connects to Ollama running on the host):
+
+```bash
+docker build -t kaiwa:local .
+docker run --rm -p 8130:8130 \
+  --add-host=host.docker.internal:host-gateway \
+  -e KAIWA_OLLAMA_URL=http://host.docker.internal:11434 \
+  -v kaiwa-data:/app/data \
+  kaiwa:local
+```
+
+Open <http://localhost:8130>. The `data` volume contains the SQLite database
+and generated audio cache. Speech recognition and VOICEVOX are optional; they
+can be provided as separate Linux services or added to a derived image.
+
+### Kubernetes
+
+The manifests in [`k8s/`](k8s/) deploy Kaiwa with a `Service` and persistent
+volumes for data and models. They expect an Ollama service named `ollama` in
+the same namespace:
+
+```bash
+kubectl apply -k k8s
+kubectl -n default port-forward service/kaiwa 8130:8130
+```
+
+The GitHub Actions workflow only builds and publishes
+`ghcr.io/yeshsanchez/kaiwa` on pushes to `main`; it never connects to a
+Kubernetes cluster. Deploy an image manually after reviewing it with:
+
+```bash
+kubectl apply -k k8s
+kubectl -n default set image deployment/kaiwa \
+  kaiwa=ghcr.io/yeshsanchez/kaiwa:sha-<commit-sha>
+```
+
 This path needs [Ollama](https://ollama.com) installed separately (the free
 local AI that powers Kaiwa by default). First launch opens the same onboarding
 wizard: it checks your hardware, recommends a responsive model, and warms up in

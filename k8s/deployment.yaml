@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kaiwa
+  labels:
+    app.kubernetes.io/name: kaiwa
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: kaiwa
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: kaiwa
+    spec:
+      securityContext:
+        fsGroup: 10001
+      containers:
+        - name: kaiwa
+          image: ghcr.io/yeshsanchez/kaiwa:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - name: http
+              containerPort: 8130
+          env:
+            - name: KAIWA_PORT
+              value: "8130"
+            - name: KAIWA_OLLAMA_URL
+              value: http://ollama:11434
+          volumeMounts:
+            - name: data
+              mountPath: /app/data
+            - name: models
+              mountPath: /app/models
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: http
+            initialDelaySeconds: 15
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: "2"
+              memory: 2Gi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: kaiwa-data
+        - name: models
+          persistentVolumeClaim:
+            claimName: kaiwa-models
